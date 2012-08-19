@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+		function searchIMDB(event) {
+
+			if (event.command === "searchimdb") {
+				safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("getSelectedText");
+			}
+		}
+
+		safari.application.addEventListener("command", searchIMDB, false);
+
+		// Respond to messages from document
+		function respondToMessage(theMessageEvent) {
+			if(theMessageEvent.name === "openIMDB") {
+				var searchText = theMessageEvent.message; 
+				if(searchText){
+					var newTab = safari.application.activeBrowserWindow.openTab();
+					newTab.url = "http://www.imdb.com/find?q="+ searchText; 
+				} else {
+					alert("Nothing to search for."); 
+					return;					
+				}
+			}
+		}
+
+		safari.application.addEventListener("message",respondToMessage,false);
+
+		</script>
+	</body>
+</html>
